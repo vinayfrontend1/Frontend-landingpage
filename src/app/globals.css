@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-image-page{
+  max-width: 100%;
+  width:100%;
+  height:100%;
+}
+.countdown-box {
+  margin: 0 10px;
+  text-align: center;
+  /* background:gainsboro; */
+}
+
+.countdown-value {
+  font-size: 25px;
+  font-weight: bold;
+  background-color:whitesmoke;
+  color: black;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.countdown-label {
+  font-size: 0.8em;
+}
