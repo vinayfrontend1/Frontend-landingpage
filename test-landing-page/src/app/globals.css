@@ -25,3 +25,44 @@
 .countdown-label {
   font-size: 0.8em;
 }
+
+/* Media Screens */
+@media screen and (max-width:768px) {
+  .cool{
+    display: flex ;
+    flex-direction: column-reverse;
+    justify-content: center;
+    width: 100%;
+  }
+  .yup{
+    width: 75%;
+    margin-left: 60px;
+    margin-right: 60px; 
+  }
+  .same{
+    width: 100% !important;
+    margin: 0;
+  }
+  .jim{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .reward-wale-img{
+    margin: 0;
+    width: 70%;
+  }
+  .pri-reg-layout{
+    width: 100%;
+  }
+  .priority-access{
+    width: 90%;
+  }
+  .just-text{
+    /* width: ; */
+  }
+  .main-layout{
+    flex-direction:unset;
+    min-height: 106vh;
+  }
+}
