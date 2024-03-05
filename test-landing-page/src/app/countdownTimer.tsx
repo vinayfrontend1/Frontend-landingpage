@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 interface CountdownTimerProps {
   targetDate: Date;
@@ -12,7 +12,8 @@ interface TimeLeft {
   completed: boolean;
 }
 
-const formatTwoDigits = (number: number): string => (number < 10 ? `0${number}` : `${number}`);
+const formatTwoDigits = (number: number): string =>
+  number < 10 ? `0${number}` : `${number}`;
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
   const calculateTimeLeft = (): TimeLeft => {
@@ -21,7 +22,9 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
 
     if (difference > 0) {
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const hours = Math.floor(
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
       const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
@@ -54,29 +57,41 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
   }, [timeLeft]);
 
   return (
-    <div className="flex">
+    <div className="flex flex-row">
       {/* Days */}
-      <div className="countdown-box">
-        <div className="countdown-value">{formatTwoDigits(timeLeft.days)}</div>
-        <div className="countdown-label">Days</div>
+      <div className="flex ">
+        <div className="countdown-box w-[50px]">
+          <div className="countdown-value">
+            {formatTwoDigits(timeLeft.days)}
+          </div>
+          <div className="countdown-label">Days</div>
+        </div>
+
+        {/* Hours */}
+        <div className="countdown-box w-[50px]">
+          <div className="countdown-value">
+            {formatTwoDigits(timeLeft.hours)}
+          </div>
+          <div className="countdown-label">Hours</div>
+        </div>
       </div>
 
-      {/* Hours */}
-      <div className="countdown-box">
-        <div className="countdown-value">{formatTwoDigits(timeLeft.hours)}</div>
-        <div className="countdown-label">Hours</div>
-      </div>
+      <div className="flex">
+        {/* Minutes */}
+        <div className="countdown-box w-[50px]">
+          <div className="countdown-value">
+            {formatTwoDigits(timeLeft.minutes)}
+          </div>
+          <div className="countdown-label">Minutes</div>
+        </div>
 
-      {/* Minutes */}
-      <div className="countdown-box">
-        <div className="countdown-value">{formatTwoDigits(timeLeft.minutes)}</div>
-        <div className="countdown-label">Minutes</div>
-      </div>
-
-      {/* Seconds */}
-      <div className="countdown-box">
-        <div className="countdown-value">{formatTwoDigits(timeLeft.seconds)}</div>
-        <div className="countdown-label">Seconds</div>
+        {/* Seconds */}
+        <div className="countdown-box w-[50px]">
+          <div className="countdown-value">
+            {formatTwoDigits(timeLeft.seconds)}
+          </div>
+          <div className="countdown-label">Seconds</div>
+        </div>
       </div>
     </div>
   );

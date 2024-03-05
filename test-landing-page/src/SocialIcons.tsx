@@ -12,7 +12,7 @@ const SocialIcons: React.FC = () => {
   ];
 
   return (
-    <div className="flex bottom-4 right-4 space-x-2">
+    <div className="flex bottom-4 right-4 space-x-4">
       {socialMediaLinks.map((link) => (
         <SocialIcon
           key={link}

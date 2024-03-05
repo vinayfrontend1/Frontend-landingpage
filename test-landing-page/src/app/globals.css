@@ -25,9 +25,12 @@
 .countdown-label {
   font-size: 0.8em;
 }
+.my-input::placeholder {
+  color: black;
+}
 
 /* Media Screens */
-@media screen and (max-width:768px) {
+/* @media screen and (max-width:576px) {
   .cool{
     display: flex ;
     flex-direction: column-reverse;
@@ -38,10 +41,12 @@
     width: 75%;
     margin-left: 60px;
     margin-right: 60px; 
+    margin-bottom: 120px;
   }
   .same{
     width: 100% !important;
     margin: 0;
+    margin: 10px;
   }
   .jim{
     width: 100%;
@@ -58,11 +63,20 @@
   .priority-access{
     width: 90%;
   }
+  .launching{
+    margin-top: 0;
+  }
+  .counter{
+    margin-bottom: 0 !important;
+  }
   .just-text{
-    /* width: ; */
+  
   }
   .main-layout{
     flex-direction:unset;
     min-height: 106vh;
   }
-}
+  .rewarsss{
+    margin-top: 120px;
+  }
+} */
