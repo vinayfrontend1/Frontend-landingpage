@@ -54,7 +54,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [timeLeft]);
+  }, [calculateTimeLeft]);
 
   return (
     <div className="flex flex-row">
