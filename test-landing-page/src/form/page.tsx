@@ -235,7 +235,7 @@ export default function Form({ handleModalClose }) {
             className="absolute top-32 mt-4 right-80 cursor-pointer"
           >
             <div className="bg-red-500 w-10 h-10 flex items-center justify-center rounded-full">
-              <span className="text-white text-2xl">&times;</span>
+              {/* <span className="text-white text-2xl">&times;</span> */}
             </div>
           </button>
 
