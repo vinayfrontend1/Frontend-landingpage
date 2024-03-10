@@ -1,7 +1,7 @@
 import axios from "axios";
 import keys from "./keys";
 
-export const baseURL = "https://www.elawdrawer.in/";
+export const baseURL = "http://uatrw.shop/";
 
 const getLocalStorageValue = (key: string, defaultValue: string | number) => {
   if (typeof window !== "undefined") {
@@ -26,6 +26,7 @@ const api = axios.create({
     Authorization: "Bearer " + getLocalStorageValue(keys.accessToken, ""),
   },
 });
+
 
 api.interceptors.response.use(
   (response) => response,

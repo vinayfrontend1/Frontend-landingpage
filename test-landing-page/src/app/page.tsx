@@ -8,7 +8,8 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import Form from "./landing/form/page";
+import Form from "@/form/page";
+// import Form from "./landing/form/page";
 
 const CountdownTimer = dynamic(() => import("../app/countdownTimer"), {
   ssr: false,
@@ -103,7 +104,7 @@ export default function Home() {
        * handle APis
        */
       setisLoading(true);
-      const response = await api.get("systemParam/2");
+      const response = await api.get("systemParam/1");
       localStorage.setItem(
         keys.systemParam,
         JSON.stringify(response.data.data?.data)
@@ -111,8 +112,8 @@ export default function Home() {
       setisLoading(false);
     }
 
-    const response = await api.get("systemParam/2");
-    console.log("System Params Response:", response);
+    // const response = await api.get("systemParam/1");
+    // console.log("System Params Response:", response);
 
     /**
      * Handles Route to specific screen
@@ -121,7 +122,7 @@ export default function Home() {
       // location.replace("/src/form");
       //
       // replace("/");
-      return <Form />;
+      return <Form handleModalClose={handleModalClose} />;
       console.log(latitude, longitude);
     } else {
       // location.replace("/landing/signin");

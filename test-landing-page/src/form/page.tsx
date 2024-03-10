@@ -20,11 +20,6 @@ export default function Form({ handleModalClose }) {
   const [handle, setHandle] = useState("");
   const [dob, setDob] = useState("");
   const [gender, setGender] = useState("");
-  // const [parsedSystemParams, setparsedSystemParams] = useState<SystemParams[]>(
-  //   []
-  // );
-  // const [email, setEmail] = useState("");
-  // const [mobile, setMobile] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
@@ -36,6 +31,7 @@ export default function Form({ handleModalClose }) {
   const [email, setEmail] = useState("");
   const [isFirstnameValid, setIsFirstnameValid] = useState(true);
   const [isUsernameValid, setIsUsernameValid] = useState(true);
+  const [isLastnamevalid, setIsLastnameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [parsedSystemParams, setparsedSystemParams] = useState<SystemParams[]>(
     []
@@ -58,7 +54,7 @@ export default function Form({ handleModalClose }) {
   };
 
   const onSubmitPress = async () => {
-    if (!email || !phoneNumber || !isValid) {
+    if (!firstName || !lastName || !email || !phoneNumber || !isValid) {
       Swal.fire({
         title: "Error",
         text: "Please fill in all the required fields.",
@@ -79,6 +75,9 @@ export default function Form({ handleModalClose }) {
       indMobileNum: rawNumber,
       userName: username,
       indEmail: email,
+      indFirstname: firstName,
+      indLastname: lastName,
+      indDob: dob,
       indEmailNotify: true,
       indMobileNotify: true,
       indPushNotify: true,
@@ -86,42 +85,32 @@ export default function Form({ handleModalClose }) {
     };
     try {
       const response = await api.post("signup", body);
+  
       console.log({ response });
-      localStorage.setItem(
-        keys.userAuthData,
-        JSON.stringify(response.data.data)
-      );
-      console.log("error response::", response.data);
-      setisLoading(false);
-      // router.push("/landing/otp-verify");
-      console.log(otp);
+  
+      if (response && response.data && response.data.data) {
+        localStorage.setItem(
+          keys.userAuthData,
+          JSON.stringify(response.data.data)
+        );
+        console.log("User Auth Data:", response.data.data);
+      } else {
+        console.error("Invalid response structure:", response);
+      }
     } catch (error) {
       Swal.fire({
         title: "Error",
-        // @ts-ignore
-        text: error.response.data.message,
+        text: error.response?.data?.message || "An error occurred",
         icon: "error",
       });
     } finally {
       setisLoading(false);
     }
+  // };
   };
 
   const openModal = () => {
     setIsModalOpen(true);
-  };
-
-  // const handleModalClose = () => {
-  //   // Set isModalOpen to false or perform any other actions to close the modal
-  //   setIsModalOpen(false);
-  // };
-
-  // const handleFirstNameChange = (e) => {
-  //   setFirstName(e.target.value);
-  // };
-
-  const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
   };
 
   const handleHandleChange = (e) => {
@@ -136,34 +125,27 @@ export default function Form({ handleModalClose }) {
     setGender(e.target.value);
   };
 
-  // const handleEmailChange = (e) => {
-  //   setEmail(e.target.value);
-  // };
-
-  // const handleMobileChange = (e) => {
-  //   setMobile(e.target.value);
-  // };
-
   const handleGetOtpClick = () => {
     // Add logic to get OTP here
     console.log("Get OTP clicked");
     setOtpSent(true);
     // setBlurFields(true);
   };
+
   const handleRegisterNowClick = () => {
     // Add your logic here to handle registration
     setIsRegistering(true);
   };
 
-  const onCheckPress = async (value: string) => {
-    const { data } = await api.get("userNameAvailability/" + value);
-    console.log(data.data.isAvailable);
-    if (data.data.isAvailable) {
-      setshowCheckmark(true);
-    } else {
-      setshowCheckmark(false);
-    }
-  };
+  // const onCheckPress = async (value: string) => {
+  //   const { data } = await api.get("userNameAvailability/" + value);
+  //   console.log(data.data.isAvailable);
+  //   if (data.data.isAvailable) {
+  //     setshowCheckmark(true);
+  //   } else {
+  //     setshowCheckmark(false);
+  //   }
+  // };
 
   const isCountryData = (obj: any): obj is CountryData => {
     return "dialCode" in obj;
@@ -190,15 +172,21 @@ export default function Form({ handleModalClose }) {
   ) => {
     const inputValue: string = e.target.value;
     setFirstName(inputValue);
-    // if (inputValue.length >= 5) {
-    //   await onCheckPress(inputValue);
-    // } else {
-    //   setshowCheckmark(null);
-    // }
     const firstnameRegex: RegExp = /^[a-zA-Z0-9_.]+$/;
 
     const isValid: boolean = firstnameRegex.test(inputValue);
     setIsFirstnameValid(isValid);
+  };
+
+  const handleLastNameChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const inputValue: string = e.target.value;
+    setLastName(inputValue);
+    const secondnameRegex: RegExp = /^[a-zA-Z0-9_.]+$/;
+
+    const isValid: boolean = secondnameRegex.test(inputValue);
+    setIsLastnameValid(isValid);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,11 +202,11 @@ export default function Form({ handleModalClose }) {
   ) => {
     const inputValue: string = e.target.value;
     setUsername(inputValue);
-    if (inputValue.length >= 5) {
-      await onCheckPress(inputValue);
-    } else {
-      setshowCheckmark(null);
-    }
+    // if (inputValue.length >= 5) {
+    //   await onCheckPress(inputValue);
+    // } else {
+    //   setshowCheckmark(null);
+    // }
     const usernameRegex: RegExp = /^[a-zA-Z0-9_.]+$/;
 
     const isValid: boolean = usernameRegex.test(inputValue);
@@ -230,26 +218,18 @@ export default function Form({ handleModalClose }) {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="bg-gray-800 bg-opacity-50 fixed inset-0"></div>
-          <button
-            onClick={handleModalClose}
-            className="absolute top-32 mt-4 right-80 cursor-pointer"
-          >
-            <div className="bg-red-500 w-10 h-10 flex items-center justify-center rounded-full">
-              {/* <span className="text-white text-2xl">&times;</span> */}
-            </div>
-          </button>
-
-          <div className="bg-white top-24 p-8 rounded-md z-10 w-[26%] mx-auto">
-            {/* <h2 className="text-2xl font-semibold mb-4">Enter Details</h2> */}
-            <form className="w-[80%] mx-10">
+          <div className="bg-white top-24 p-8 rounded-md z-10 w-[65%] md:w-[40%] lg:[40%] sm:[40%] xl:[40%] 2xl">
+            <img
+              src="/closeicon.png"
+              alt="close"
+              onClick={handleModalClose}
+              className="absolute right-6 top-4 cursor-pointer w-6 h-6 top-[70px] md:right-[160px] lg:right-[160px] md:top-[125px] lg:top-[80px]"
+              style={{ filter: "invert(0)" }}
+            />
+            <h2 className="text-2xl font-semibold mb-4">Enter Details</h2>
+            <form>
               {/* Form fields */}
               <div className="mb-4">
-                {/* <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  First Name
-                </label> */}
                 <input
                   type="text"
                   id="firstName"
@@ -257,14 +237,23 @@ export default function Form({ handleModalClose }) {
                   name="firstName"
                   value={firstName}
                   onChange={handleFirstNameChange}
-                  className="mt-1 p-2 w-full border text-sm rounded-md bg-gray-100 italic font-semibold my-input"
+                  className={`mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-semibold ${
+                    otpSent ? "disabled" : ""
+                  }`}
+                  disabled={otpSent}
                 />
-                {/* <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Last Name
-                </label> */}
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="First Name"
+                  name="username"
+                  value={username}
+                  onChange={handleUsernameChange}
+                  className={`mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-semibold ${
+                    otpSent ? "disabled" : ""
+                  }`}
+                  disabled={otpSent}
+                />
                 <input
                   type="text"
                   id="lastName"
@@ -272,84 +261,62 @@ export default function Form({ handleModalClose }) {
                   name="lastName"
                   value={lastName}
                   onChange={handleLastNameChange}
-                  className="mt-2 p-2 w-full border text-sm rounded-md bg-gray-100 italic font-semibold my-input"
+                  className={`mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-semibold ${
+                    otpSent ? "disabled" : ""
+                  }`}
+                  disabled={otpSent}
                 />
-                {/* <label
-                  htmlFor="handle"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Handle
-                </label> */}
                 <input
-                      id="username"
-                      type="text"
-                      className={`form-input w-full ${isUsernameValid ? "text-gray-800" : "text-red-500"
-                        }`}
-                      placeholder="username"
-                      value={username}
-                      onChange={handleUsernameChange}
-                      required
-                    />
-                {/* <input
                   type="text"
                   id="handle"
                   name="handle"
                   placeholder="Handle"
                   value={handle}
                   onChange={handleHandleChange}
-                  className="mt-2 p-2 w-full border text-sm rounded-md bg-gray-100 italic font-semibold my-input"
-                /> */}
-                {/* <label
-                  htmlFor="dateOfBirth"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Date of Birth
-                </label> */}
+                  className={`mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-semibold ${
+                    otpSent ? "disabled" : ""
+                  }`}
+                  disabled={otpSent}
+                />
                 <input
-                  type="calendar"
+                  type="date"
                   id="dateOfBirth"
                   name="dateOfBirth"
                   placeholder="Date of Birth"
                   value={dob}
                   onChange={handleDobChange}
-                  className="mt-2 p-2 w-full border text-sm rounded-md bg-gray-100 italic font-semibold my-input"
+                  className={`mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-semibold ${
+                    otpSent ? "disabled" : ""
+                  }`}
+                  disabled={otpSent}
                 />
-                {/* <label
-                  htmlFor="gender"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Gender
-                </label> */}
-                <input
-                  type="gender"
+                <select
                   id="gender"
                   name="gender"
-                  placeholder="Gender"
                   value={gender}
                   onChange={handleGenderChange}
-                  className="mt-2 p-2 w-full border text-sm rounded-md bg-gray-100 italic font-semibold my-input"
-                />
-                {/* <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className={`mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-semibold ${
+                    otpSent ? "disabled" : ""
+                  }`}
+                  disabled={otpSent}
                 >
-                  Email
-                </label> */}
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
                 <input
-                    id="Email"
-                    type="email"
-                    placeholder="Enter"
-                    className={`form-input w-full ${isEmailValid ? "text-gray-800" : "text-red-500"
-                      }`}
-                    value={email}
-                    onChange={handleEmailChange}
-                  />
-                  {!isEmailValid && (
-                    <p className="text-red-500 text-xs">Invalid email format.</p>
-                  )}
-                {/* <label htmlFor="mobile" className=" ">
-                  Mobile
-                </label> */}
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  name="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  className={`mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-semibold ${
+                    otpSent ? "disabled" : ""
+                  }`}
+                  disabled={otpSent}
+                />
                 <PhoneInput
                   country={"in"}
                   enableSearch={true}
@@ -359,32 +326,23 @@ export default function Form({ handleModalClose }) {
                   }
                   inputStyle={{ width: "100%" }}
                 />
-                {!isValid && (
-                    <p className="text-red-500 text-xs">
-                      Mobile Number should be of 10 Digits.
-                    </p>
-                  )}
               </div>
-
-              {/* ... Repeat for other form fields ... */}
 
               {/* Get OTP button */}
               {otpSent && (
                 <div className={`mb-4 ${blurFields ? "filter blur-sm" : ""}`}>
-                  {/* Display OTP input field */}
                   <input
                     type="text"
                     id="otp"
                     placeholder="Enter OTP"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    className="mt-1 p-2 w-full border text-sm rounded-md bg-gray-100 italic font-black"
+                    className="mt-1 p-2 w-full text-sm rounded-md bg-gray-100 italic font-black"
                   />
-                  {/* Display Register Now button */}
                   <button
                     type="button"
                     onClick={handleRegisterNowClick}
-                    className="w-full  bg-red-500 text-white p-3 rounded-md mt-4"
+                    className="w-full bg-red-500 text-white p-3 rounded-md mt-4"
                   >
                     {isRegistering ? "Registering..." : "Register Now"}
                   </button>
@@ -392,20 +350,15 @@ export default function Form({ handleModalClose }) {
               )}
 
               {/* Get OTP button */}
-              {/* {!otpSent && ( */}
+              {!otpSent && (
                 <button
                   type="button"
                   onClick={onSubmitPress}
-                  className="w-full  bg-red-500 text-white p-3 rounded-lg"
-                  disabled={isLoading}
+                  className="w-full bg-red-500 text-white p-3 rounded-md"
                 >
-                  {isLoading ? (
-                    ""
-                  ) : (
-                    "Sign Up"
-                  )}
+                  Get OTP
                 </button>
-              {/* )} */}
+              )}
 
               {/* Resend OTP line */}
               {otpSent && (
