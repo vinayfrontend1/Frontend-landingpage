@@ -6,6 +6,7 @@ import { SystemParams } from "@/config/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PhoneInput, { CountryData } from "react-phone-input-2";
 // import PhoneInput, { CountryData } from "react-phone-input-2";
 // import "react-phone-input-2/lib/bootstrap.css";
 import Swal from "sweetalert2";
@@ -99,7 +100,7 @@ export default function SignIn() {
                   >
                     Mobile Number
                   </label>
-                  {/* <PhoneInput
+                  <PhoneInput
                     country={"in"}
                     enableSearch={true}
                     value={phoneNumber}
@@ -107,7 +108,7 @@ export default function SignIn() {
                       handlePhoneNumberChange(value, country)
                     }
                     inputStyle={{ width: "100%" }}
-                  /> */}
+                  />
                   {!isValid && (
                     <p className="text-red-500">
                       Mobile Number should be of 10 Digits.

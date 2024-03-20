@@ -11,6 +11,20 @@ const getLocalStorageValue = (key: string, defaultValue: string | number) => {
   return defaultValue;
 };
 
+const getDeviceFingerprint = () => {
+  if (typeof window !== "undefined" && navigator.userAgent) {
+    const userAgent = navigator.userAgent;
+    const language = navigator.language;
+    const hardwareConcurrency = navigator.hardwareConcurrency;
+    const screenResolution = `${window.screen.width}x${window.screen.height}`;
+    const timezoneOffset = new Date().getTimezoneOffset();
+
+    const fingerprint = `${userAgent}|${language}|${hardwareConcurrency}|${screenResolution}|${timezoneOffset}`;
+    return fingerprint;
+  }
+  return "rajatdevicefingerprint";
+};
+
 const api = axios.create({
   baseURL: baseURL + "api/",
   // baseURL: "http://localhost:8000/api/",
@@ -19,14 +33,13 @@ const api = axios.create({
     //   keys.fingerPrint,
     //   "rajatdevicefingerprint"
     // ),
-    fingerprint: "rajatdevicefingerprint",
+    fingerprint: getDeviceFingerprint(),
     latitude: getLocalStorageValue(keys.latitute, 90),
     longitude: getLocalStorageValue(keys.longitude, 90),
     lan: "en",
     Authorization: "Bearer " + getLocalStorageValue(keys.accessToken, ""),
   },
 });
-
 
 api.interceptors.response.use(
   (response) => response,
